@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  href="process_manager.css">
+<title>Process Manager</title>
+<style>
+</style>
+</head>
+<body>
+    <h1>PY Process Manager</h1>
+    <h2>Welcome to our PY Process Manager. This web app displays all system/process information running on your computer based on CPU%, Memory%, and I/O% utilization in realtime (Updates itself every second).</h2>
+    <h2>
+        It also tags each process as either I/O Bound or CPU Bound.
+    </h2>
+
+    <button id="b1"><b>START</b></button>
+    <button id="b2"><b>STOP</b></button>
+
+    <br>
+    <br>
+    <section class="Process-list">
+        
+            
+            <ul id="Process">
+                <li>PID</li>
+                <li>Process Name</li>
+                <li>CPU%</li>
+                <li>Memory%</li>
+                <li>I/O%</li>
+                <li>Tag</li>
+            </ul>
+        </div>
+        </div>
+    </section>
+
+    <script src="main.js"></script>
+</body>
+</html>
