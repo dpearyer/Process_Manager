@@ -26,7 +26,7 @@
 </head>
 <body>
   <h1>Web Process Manager</h1>
-  <h2>Welcome to our Web Process Manager. This web app displays all system/process information running on your computer based on CPU%, Memory%, and I/O% utilization.</h2>
+  <h2>Welcome to our Web Process Manager. This web app displays all system/process information running on your computer based on CPU%, Memory%, and I/O utilization%.</h2>
   <h2>
       It also tags each process as either I/O Bound or CPU Bound.
   </h2>
@@ -35,10 +35,11 @@
   <button onclick="stopFetching()" id="b2"><b>STOP</b></button>
   <button onclick="clearTable()" id="b3"><b>CLEAR</b></button>
 
-  <br>
-  <br>
+  <h3>System Information:</h3>
+  <p id="info">???</p>
 
-  <p><b>*These bottom controls allows you to sort/view the processes by either Highest % usage, Alphabetical order, PID, or view which processes are IO Bound for a few seconds*</b></p>
+  <h3>Process Information:</h3>
+  <p><b>*The controls below allows you to sort/view the processes by either Highest % usage, Alphabetical order, PID, or view which processes are IO Bound for a few seconds*</b></p>
 
   <ul>
     <li onclick="organizeTableByPID()">PID ↑</li>
@@ -67,16 +68,39 @@
     let fetchInterval;
 
     function startFetching() {
+      // Fetch system information and displays it
+      fetchSystemInfo();
+
       // Fetch processes immediately
       fetchProcesses();
 
       // Set up interval to fetch processes every 3 seconds (adjust as needed)
       fetchInterval = setInterval(fetchProcesses, 3000);
+
     }
 
     function stopFetching() {
       // Clear the interval
       clearInterval(fetchInterval);
+    }
+
+    async function fetchSystemInfo() {
+      try {
+        const response = await fetch('/getSystemInfo');
+        const data = await response.json();
+        
+        const formattedRam = (data.ram / (1024 ** 3)).toFixed(2);
+
+        const infoParagraph = document.getElementById('info');
+        infoParagraph.innerHTML = `
+          Device Name: ${data.deviceName}<br>
+          OS Type: ${data.osType}<br>
+          CPU Type: ${data.cpuType}<br>
+          RAM: ${formattedRam} GB<br>
+        `;
+      } catch (error) {
+        console.error('Error fetching system information:', error);
+      }
     }
 
     async function fetchProcesses() {
@@ -123,6 +147,9 @@
       stopFetching();
       const tableBody = document.getElementById('system-info');
       tableBody.innerHTML = '';
+
+      const pBody = document.getElementById('info');
+      pBody.innerHTML = '???';
     }
 
     function organizeTableByPID() {
